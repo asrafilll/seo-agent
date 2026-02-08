@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load seo_extras %}
+
+{% block title %}Keyword Research — SEO Agent{% endblock %}
+
+{% block content %}
+<h1>Keyword Research</h1>
+<p>Enter a seed keyword to discover related search queries and long-tail keyword ideas.</p>
+
+<form method="post" class="tool-form" id="keywordForm">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_seed_keyword">Seed keyword:</label>
+        {{ form.seed_keyword }}
+        {% if form.seed_keyword.errors %}
+        <span class="form-error">{{ form.seed_keyword.errors.0 }}</span>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">Research Keywords</button>
+</form>
+
+{% if result %}
+<div class="result-card">
+    <h2>Results for "{{ result.seed_keyword }}"</h2>
+    {% if result.total_keywords %}
+    <p><strong>{{ result.total_keywords }}</strong> keyword ideas discovered</p>
+    {% endif %}
+    <div class="result-content">
+        {{ result.agent_summary|render_markdown }}
+    </div>
+    <p class="result-meta">Generated {{ result.created_at }}</p>
+</div>
+{% endif %}
+
+{% if recent_research %}
+<h2>Recent Research</h2>
+<div class="history-list">
+    {% for r in recent_research %}
+    <div class="history-item">
+        <span class="history-title">{{ r.seed_keyword }}</span>
+        {% if r.total_keywords %}
+        <span class="history-score">{{ r.total_keywords }} keywords</span>
+        {% endif %}
+        <span class="history-date">{{ r.created_at|date:"M d, Y H:i" }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

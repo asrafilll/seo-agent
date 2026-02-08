@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SEO Agent{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="nav-brand">SEO Agent</a>
+        <div class="nav-links">
+            <a href="{% url 'seo:audit' %}">Audit</a>
+            <a href="{% url 'seo:keywords' %}">Keywords</a>
+            <a href="{% url 'seo:optimize' %}">Optimize</a>
+            <a href="{% url 'seo:chat' %}">Chat</a>
+            <a href="{% url 'seo:history' %}">History</a>
+        </div>
+    </nav>
+    <main class="container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+    document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+            var btn = form.querySelector('button[type="submit"]');
+            if (btn && !btn.disabled) {
+                btn.disabled = true;
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = 'Processing...';
+                form.classList.add('loading');
+            }
+        });
+    });
+    // Auto-scroll chat messages
+    var chatEl = document.getElementById('chatMessages');
+    if (chatEl) chatEl.scrollTop = chatEl.scrollHeight;
+    </script>
+</body>
+</html>

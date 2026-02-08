@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}SEO Agent — Home{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>SEO Agent</h1>
+    <p>AI-powered SEO analysis and optimization tools</p>
+    <div class="feature-grid">
+        <a href="{% url 'seo:audit' %}" class="feature-card">
+            <h3>Site Audit</h3>
+            <p>Crawl any URL and get a comprehensive SEO audit with actionable recommendations.</p>
+        </a>
+        <a href="{% url 'seo:keywords' %}" class="feature-card">
+            <h3>Keyword Research</h3>
+            <p>Discover keyword ideas from Google Autocomplete with categorized suggestions.</p>
+        </a>
+        <a href="{% url 'seo:optimize' %}" class="feature-card">
+            <h3>Content Optimization</h3>
+            <p>Analyze your page content for keyword density, readability, and structure.</p>
+        </a>
+        <a href="{% url 'seo:chat' %}" class="feature-card">
+            <h3>SEO Chat</h3>
+            <p>Ask any SEO question and get expert advice powered by AI.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

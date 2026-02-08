@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load seo_extras %}
+
+{% block title %}Site Audit — SEO Agent{% endblock %}
+
+{% block content %}
+<h1>Site Audit</h1>
+<p>Enter a URL to get a comprehensive SEO audit with actionable recommendations.</p>
+
+<form method="post" class="tool-form" id="auditForm">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_url">URL to audit:</label>
+        {{ form.url }}
+        {% if form.url.errors %}
+        <span class="form-error">{{ form.url.errors.0 }}</span>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">Run Audit</button>
+</form>
+
+{% if report %}
+<div class="result-card">
+    <h2>Audit Report: {{ report.url }}</h2>
+    {% if report.score is not None %}
+    <div class="score-badge score-{{ report.score|divisibleby:1 }}">
+        Score: {{ report.score }}/100
+    </div>
+    {% endif %}
+    <div class="result-content">
+        {{ report.agent_summary|render_markdown }}
+    </div>
+    <p class="result-meta">Generated {{ report.created_at }}</p>
+</div>
+{% endif %}
+
+{% if recent_audits %}
+<h2>Recent Audits</h2>
+<div class="history-list">
+    {% for a in recent_audits %}
+    <a href="{% url 'seo:audit_detail' a.pk %}" class="history-item">
+        <span class="history-title">{{ a.url }}</span>
+        {% if a.score is not None %}
+        <span class="history-score">Score: {{ a.score }}</span>
+        {% endif %}
+        <span class="history-date">{{ a.created_at|date:"M d, Y H:i" }}</span>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load seo_extras %}
+
+{% block title %}Audit: {{ report.url }} — SEO Agent{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'seo:audit' %}">&larr; Back to Audit</a></p>
+
+<h1>Audit Report</h1>
+<h2>{{ report.url }}</h2>
+
+{% if report.score is not None %}
+<div class="score-badge">Score: {{ report.score }}/100</div>
+{% endif %}
+
+<div class="result-card">
+    <div class="result-content">
+        {{ report.agent_summary|render_markdown }}
+    </div>
+</div>
+
+<p class="result-meta">Generated {{ report.created_at }}</p>
+{% endblock %}

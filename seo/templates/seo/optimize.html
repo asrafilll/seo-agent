@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load seo_extras %}
+
+{% block title %}Content Optimization — SEO Agent{% endblock %}
+
+{% block content %}
+<h1>Content Optimization</h1>
+<p>Enter a URL to analyze its content for keyword density, readability, and structure.</p>
+
+<form method="post" class="tool-form" id="optimizeForm">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_url">URL to analyze:</label>
+        {{ form.url }}
+        {% if form.url.errors %}
+        <span class="form-error">{{ form.url.errors.0 }}</span>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">Analyze Content</button>
+</form>
+
+{% if result %}
+<div class="result-card">
+    <h2>Analysis: {{ result.url }}</h2>
+    <div class="result-content">
+        {{ result.agent_summary|render_markdown }}
+    </div>
+    <p class="result-meta">Generated {{ result.created_at }}</p>
+</div>
+{% endif %}
+
+{% if recent_optimizations %}
+<h2>Recent Analyses</h2>
+<div class="history-list">
+    {% for o in recent_optimizations %}
+    <div class="history-item">
+        <span class="history-title">{{ o.url }}</span>
+        <span class="history-date">{{ o.created_at|date:"M d, Y H:i" }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

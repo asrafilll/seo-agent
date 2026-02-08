@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load seo_extras %}
+
+{% block title %}SEO Chat — SEO Agent{% endblock %}
+
+{% block content %}
+<h1>SEO Chat</h1>
+
+<div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+        {% for msg in chat_history %}
+        <div class="chat-message chat-{{ msg.role }}">
+            <strong>{{ msg.role|title }}:</strong>
+            <div class="message-content">{{ msg.content|render_markdown }}</div>
+        </div>
+        {% empty %}
+        <p class="chat-empty">Start a conversation about SEO. Ask anything!</p>
+        {% endfor %}
+    </div>
+
+    <form method="post" class="chat-form" id="chatForm">
+        {% csrf_token %}
+        <div class="form-row">
+            <textarea name="message" rows="3" placeholder="Ask an SEO question..." required class="form-input" id="chatInput"></textarea>
+            <button type="submit" class="btn-primary" id="submitBtn">Send</button>
+        </div>
+    </form>
+
+    {% if chat_history %}
+    <div class="chat-actions">
+        <form method="post" style="display:inline">
+            {% csrf_token %}
+            <input type="hidden" name="new_chat" value="1">
+            <button type="submit" class="btn-secondary">New Chat</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

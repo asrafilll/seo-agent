@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}History — SEO Agent{% endblock %}
+
+{% block content %}
+<h1>History</h1>
+
+{% if audits %}
+<h2>Site Audits</h2>
+<div class="history-list">
+    {% for a in audits %}
+    <a href="{% url 'seo:audit_detail' a.pk %}" class="history-item">
+        <span class="history-title">{{ a.url }}</span>
+        {% if a.score is not None %}
+        <span class="history-score">Score: {{ a.score }}</span>
+        {% endif %}
+        <span class="history-date">{{ a.created_at|date:"M d, Y H:i" }}</span>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if keyword_reports %}
+<h2>Keyword Research</h2>
+<div class="history-list">
+    {% for r in keyword_reports %}
+    <div class="history-item">
+        <span class="history-title">{{ r.seed_keyword }}</span>
+        {% if r.total_keywords %}
+        <span class="history-score">{{ r.total_keywords }} keywords</span>
+        {% endif %}
+        <span class="history-date">{{ r.created_at|date:"M d, Y H:i" }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if optimizations %}
+<h2>Content Optimizations</h2>
+<div class="history-list">
+    {% for o in optimizations %}
+    <div class="history-item">
+        <span class="history-title">{{ o.url }}</span>
+        <span class="history-date">{{ o.created_at|date:"M d, Y H:i" }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if conversations %}
+<h2>Conversations</h2>
+<div class="history-list">
+    {% for c in conversations %}
+    <div class="history-item">
+        <span class="history-title">{{ c }}</span>
+        <span class="history-date">{{ c.updated_at|date:"M d, Y H:i" }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if not audits and not keyword_reports and not optimizations and not conversations %}
+<p class="chat-empty">No history yet. Start using the tools to see results here.</p>
+{% endif %}
+{% endblock %}
